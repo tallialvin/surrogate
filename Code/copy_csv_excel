@@ -1,0 +1,46 @@
+import os
+import pandas as pd
+from openpyxl import Workbook
+
+
+
+
+def process_csv_files(directory_path):
+    # Get the name of the immediate parent folder (folder3 in this case)
+    folder_name = os.path.basename(directory_path)
+    
+    # Create a new Excel workbook
+    wb = Workbook()
+    wb.remove(wb.active)  # Remove the default sheet
+    
+    # Counter for sheet naming
+    counter = 1
+    
+    # Iterate through all files in the directory
+    for filename in os.listdir(directory_path):
+        if filename.endswith('.csv'):
+            # Read the CSV file
+            df = pd.read_csv(os.path.join(directory_path, filename))
+            
+            # Remove the 'Epoch' column if it exists
+            if 'Epoch' in df.columns:
+                df = df.drop('Epoch', axis=1)
+            
+            # Create a new sheet with the naming convention
+            sheet_name = f"{folder_name}~{counter}"
+            ws = wb.create_sheet(title=sheet_name)
+            
+            # Write the dataframe to the sheet
+            for r in pd.DataFrame(df).itertuples():
+                ws.append(r[:])
+            
+            counter += 1
+    
+    # Save the Excel file in the same directory
+    excel_filename = f"{folder_name}_results.xlsx"
+    wb.save(os.path.join(directory_path, excel_filename))
+
+# Usage
+# Base directory
+base_dir = '/home/emu/Documents/surrogate/Code/experiment_results_1/multiple_objects/cs3_1/num_trains-100'
+process_csv_files(base_dir)

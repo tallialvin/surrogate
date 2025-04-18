@@ -1,0 +1,22 @@
+arguments:
+  --dataset		Dataset to test the GNN architecture on. 
+  --epochs  		Number of epochs to run.
+  --dropout_ratio	Probability of dropout.
+  --pooling_ratio	Ratio of the new number of nodes after pooling.
+  --num_features	Input dimension.
+  --nhid		Hidden dimension.
+  --final_dim		Output dimension.
+  --alpha		The margin of the triplet loss.
+ 
+# For example
+
+# 2stg+ setting
+cd Code
+python train.py --epochs=100 --dropout_ratio=0.5 --pooling_ratio=0.5 --num_features=32 --nhid=32 --final_dim=32 --alpha=1.5
+
+
+
+
+ 
+
+

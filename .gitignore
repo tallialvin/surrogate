@@ -1,0 +1,6 @@
+*.stl
+*.step
+*.ply
+*.pkl
+/dataset/
+/Code/experiment_result*

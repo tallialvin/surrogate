@@ -1,0 +1,169 @@
+# dataset.py
+import os
+import glob
+import re
+import numpy as np
+import torch
+from torch_geometric.data import Data, Dataset
+import pickle
+
+from shortpath2 import knn_to_graph
+from downsampling import edge_ds_2, vol, farthest_point_sampling
+from tqdm import tqdm
+from concurrent.futures import ThreadPoolExecutor, TimeoutError
+import networkx as nx
+
+
+class GraphDataset(Dataset):
+    def __init__(self, directory):
+        print("i am in GraphDataSet")
+        self.directory = directory
+        self.file_numbers = self.get_available_files()
+        print(f"Found {len(self.file_numbers)} files.")
+        
+        self.data_list = []
+        timeout_duration = 30
+
+        with tqdm(total=len(self.file_numbers), desc="Processing files", unit="file") as pbar:
+            while self.file_numbers:  # Continue until the list is empty
+                file_number = self.file_numbers.pop(0)  # Remove and get the first file number
+                file_path = os.path.join(self.directory, f"data-set-{file_number}.pkl")
+
+                # Check if file exists before processing
+                if not os.path.exists(file_path):
+                    print("here")
+                    pbar.update(1)
+                    continue
+
+                pbar.set_description(f"Processing file {file_number}")
+                # Use ThreadPoolExecutor to process the file with a timeout
+                with ThreadPoolExecutor(max_workers=1) as executor:
+                    future = executor.submit(self.process_file, file_number)
+                    try:
+                        # Attempt to get the result within the timeout duration
+                        graph_data = future.result(timeout=timeout_duration)
+                        if graph_data is not None:
+                            self.data_list.append(graph_data)
+                    except TimeoutError:
+                        # Handle timeout by canceling the task and removing the file
+                        print(f"\nTask for file {file_number} timed out. Removing file: {file_path}")
+                        future.cancel()  # Cancel the task
+                        try:
+                            os.remove(file_path)  # Remove the file
+                            print(f"File {file_path} removed successfully.")
+                        except Exception as e:
+                            print(f"Failed to remove file {file_path}: {e}")
+                    except Exception as e:
+                        # Handle other unexpected errors
+                        print(f"Error processing file {file_number}: {e}")
+                    finally:
+                        # Increment file_number to proceed to the next file
+                        file_number += 1
+                # Update the progress bar
+                pbar.update(1)
+ 
+        
+        print(f"\nLoaded {len(self.data_list)} graphs.")
+
+    def get_available_files(self):
+        file_pattern = os.path.join(self.directory, 'data-set-*.pkl')
+        files = glob.glob(file_pattern)
+        
+        file_numbers = []
+        for file in files:
+            filename = os.path.basename(file)
+            match = re.search(r'(\d+)', filename)
+            if match:
+                number_str = match.group(1)
+                try:
+                    file_numbers.append(int(number_str))
+                except ValueError:
+                    print(f"Warning: Could not convert '{number_str}' to an integer.")
+        
+        return sorted(file_numbers)
+
+    def process_file(self, file_number):
+        data = self.load_data_set(file_number)
+
+        if data is not None:
+            
+            # Safely process obstacles_pcd
+            obstacles_pcd = data['obstacles_pcd']
+            if isinstance(obstacles_pcd, tuple):
+                # Convert tuple to NumPy array if necessary
+                obstacles_pcd = np.array(obstacles_pcd[0])
+
+            # Safely process obj_pcd
+            obj_pcd = data['obj_pcd']
+            if isinstance(obj_pcd, tuple):
+                # Convert tuple to NumPy array if necessary
+                obj_pcd = np.array(obj_pcd[0])            
+
+            ratio = 0.001
+            # Convert to numpy arrays
+            downsample_cloud_1 = farthest_point_sampling(obj_pcd, obj_pcd.shape[0]*ratio)
+            downsample_cloud_2 = farthest_point_sampling(obstacles_pcd, obstacles_pcd.shape[0]*ratio)
+            # downsample_cloud_1 = edge_ds_2(obj_pcd, initial_voxel_size=initial_voxel_size, edge_voxel_size=edge_voxel_size, curvature_threshold=curvature_threshold, max_points=obj_pcd.shape[0]*ratio)     
+            # downsample_cloud_2 = edge_ds_2(obstacles_pcd, initial_voxel_size=initial_voxel_size, edge_voxel_size=edge_voxel_size, curvature_threshold=curvature_threshold, max_points=obstacles_pcd.shape[0]*ratio)
+        
+            # Combine downsampled point clouds
+            combined_cloud = np.vstack((downsample_cloud_1, downsample_cloud_2))
+
+            # Create other_data with class information
+            other_data = [{'class': 'object'} for _ in range(len(downsample_cloud_1))] + \
+                        [{'class': 'obstacle'} for _ in range(len(downsample_cloud_2))]
+
+            # Obtaining base id (lowest point in the combined cloud)
+            base_id = np.argmin(combined_cloud[:, 2])
+
+            # Create graphs with adjusted node IDs using k-NN
+            G1 = knn_to_graph(downsample_cloud_1, other_data[:len(downsample_cloud_1)], k=5, graph_threshold=1)
+            G2 = knn_to_graph(downsample_cloud_2, other_data[len(downsample_cloud_1):], k=5, graph_threshold=1, 
+                            node_id_offset=len(downsample_cloud_1))
+
+            # Compose the graphs
+            G = nx.compose(G1, G2)
+
+            # Create edge_index tensor
+            edge_index = torch.tensor(list(G.edges()), dtype=torch.long).t().contiguous()
+
+            # Create feature tensor with 4 attributes (3 position + 1 class)
+            x = torch.tensor([[*G.nodes[n]['position'], 
+                            1 if G.nodes[n]['other_data']['class'] == 'object' else 0] 
+                            for n in G.nodes()], dtype=torch.float)
+            
+
+            # Ensure y is a single label for the entire graph (0 or 1)
+            feasibility = data.get('feasibility', False)  # Assuming feasibility is defined in your data
+            y = torch.tensor([1 if feasibility else 0], dtype=torch.long)  # Single label for graph
+
+
+            return Data(x=x, edge_index=edge_index, y=y).to("cuda:0")
+
+
+        else:
+            print(f"No data found for file number: {file_number}")
+            return None
+    
+    def load_data_set(self, file_number):
+
+        file_path = os.path.join(self.directory, f'data-set-{file_number}.pkl')
+
+        # Check if the file exists
+        if not os.path.exists(file_path):
+            print(f"Error: File {file_path} does not exist.")
+            return None
+
+        # Load the dataset from the pickle file
+        with open(file_path, 'rb') as f:
+            data_set = pickle.load(f)
+
+        # print(f"Data set loaded from {file_path}")
+
+        return data_set
+
+    def __len__(self):
+        return len(self.data_list)
+
+    def __getitem__(self, idx):
+        return self.data_list[idx]

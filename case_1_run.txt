@@ -1,0 +1,224 @@
+conda activate planners && cd /root/ros2_ws/src/sequence_planner/ && python -c "from seqgen_or import SingleObjectiveGA; SingleObjectiveGA(case_num=1, genome_rate=1, constraint_type='interf
+erencefree', objective_list=['difficulty'], progress_type='rough', initialization_method='random', n_generations=100, n_runs=10, save_pkl=False)"
+
+ Best sequence of run 1 : [1, 16, 25, 49, 73, 21, 12, 23, 50, 34, 43, 42, 30, 20, 62, 56, 45, 51, 39, 32, 10, 26, 65, 71, 47, 11, 15, 14, 58, 13, 6, 18, 24, 68, 36, 48, 66, 3, 40, 54, 33, 7, 41, 44, 67, 63, 35, 37, 8, 17, 38, 64, 74, 55, 22, 69, 52, 19, 57, 28, 31, 70, 46, 61, 5, 29, 72, 9, 4, 2, 27, 60, 59, 53]
+ Interference-free: False
+ Feasibility: False
+ Stability: False
+ Availability: False
+ Best fitness (minimization problem): 1.0
+
+
+ Best sequence of run 2 : [1, 67, 29, 41, 34, 30, 65, 49, 47, 22, 14, 42, 56, 11, 39, 58, 20, 33, 69, 18, 57, 55, 68, 63, 17, 38, 53, 8, 2, 21, 61, 7, 26, 73, 9, 44, 59, 13, 27, 66, 19, 36, 12, 37, 54, 5, 6, 24, 74, 64, 71, 31, 52, 51, 62, 43, 15, 46, 10, 70, 4, 25, 50, 3, 45, 48, 60, 40, 23, 72, 32, 35, 28, 16]
+ Interference-free: False
+ Feasibility: False
+ Stability: False
+ Availability: False
+ Best fitness (minimization problem): 1.0
+
+
+ Best sequence of run 3 : [1, 61, 63, 22, 65, 66, 19, 14, 26, 43, 56, 6, 13, 16, 49, 53, 50, 38, 28, 27, 67, 25, 47, 24, 41, 52, 5, 4, 37, 11, 36, 40, 68, 18, 39, 32, 57, 51, 73, 9, 20, 34, 62, 8, 30, 3, 17, 12, 72, 10, 64, 70, 29, 74, 71, 58, 60, 42, 33, 31, 44, 23, 46, 59, 54, 69, 15, 35, 2, 48, 45, 7, 21, 55]
+ Interference-free: False
+ Feasibility: False
+ Stability: False
+ Availability: False
+ Best fitness (minimization problem): 1.0
+
+
+ Best sequence of run 4 : [1, 44, 51, 2, 10, 62, 57, 49, 56, 54, 19, 5, 42, 20, 18, 67, 55, 52, 61, 46, 40, 53, 22, 26, 63, 70, 11, 38, 68, 45, 6, 12, 73, 8, 31, 25, 66, 37, 69, 32, 30, 59, 64, 29, 28, 24, 16, 47, 43, 48, 34, 9, 50, 27, 7, 13, 4, 60, 74, 39, 65, 36, 35, 21, 23, 3, 72, 14, 71, 33, 15, 41, 58, 17]
+ Interference-free: False
+ Feasibility: False
+ Stability: False
+ Availability: False
+ Best fitness (minimization problem): 1.0
+
+
+ Best sequence of run 5 : [1, 14, 31, 61, 13, 70, 19, 67, 9, 12, 54, 44, 16, 21, 55, 46, 53, 68, 49, 51, 30, 11, 24, 52, 57, 66, 43, 40, 15, 56, 62, 28, 25, 8, 34, 22, 48, 64, 18, 39, 63, 38, 37, 59, 45, 5, 4, 32, 27, 7, 71, 23, 72, 69, 47, 29, 41, 17, 6, 50, 74, 42, 35, 10, 33, 36, 26, 20, 58, 2, 60, 3, 73, 65]
+ Interference-free: False
+ Feasibility: False
+ Stability: False
+ Availability: False
+ Best fitness (minimization problem): 1.0
+
+
+ Best sequence of run 6 : [1, 18, 15, 56, 27, 70, 66, 49, 65, 28, 68, 6, 58, 46, 38, 24, 45, 52, 74, 41, 5, 54, 31, 39, 9, 10, 8, 71, 40, 44, 7, 63, 34, 21, 37, 60, 48, 4, 32, 33, 22, 25, 59, 13, 69, 47, 23, 42, 30, 64, 72, 61, 53, 50, 36, 19, 62, 51, 20, 12, 29, 11, 16, 55, 73, 67, 43, 2, 17, 35, 57, 26, 14, 3]
+ Interference-free: False
+ Feasibility: False
+ Stability: False
+ Availability: False
+ Best fitness (minimization problem): 1.0
+
+
+ Best sequence of run 7 : [1, 68, 37, 18, 71, 35, 32, 29, 66, 46, 49, 40, 28, 52, 60, 27, 26, 38, 50, 41, 51, 70, 69, 63, 12, 42, 58, 19, 54, 74, 67, 34, 8, 36, 45, 62, 30, 21, 15, 25, 53, 65, 5, 57, 4, 33, 61, 24, 59, 6, 47, 22, 14, 55, 7, 39, 44, 56, 23, 2, 11, 10, 13, 20, 3, 64, 73, 31, 16, 9, 17, 43, 72, 48]
+ Interference-free: False
+ Feasibility: False
+ Stability: False
+ Availability: False
+ Best fitness (minimization problem): 1.0
+
+
+ Best sequence of run 8 : [1, 3, 42, 46, 71, 19, 8, 29, 7, 9, 45, 32, 17, 15, 67, 35, 72, 73, 69, 44, 70, 64, 31, 33, 2, 12, 39, 10, 56, 11, 26, 41, 13, 23, 34, 63, 20, 58, 53, 4, 60, 18, 52, 51, 50, 30, 65, 21, 16, 49, 38, 14, 66, 22, 54, 47, 43, 62, 74, 57, 48, 36, 24, 61, 28, 25, 59, 40, 27, 37, 55, 68, 6, 5]
+ Interference-free: False
+ Feasibility: False
+ Stability: False
+ Availability: False
+ Best fitness (minimization problem): 1.0
+
+
+ Best sequence of run 9 : [1, 36, 59, 2, 6, 10, 19, 14, 23, 34, 20, 17, 53, 13, 12, 43, 45, 26, 35, 51, 73, 50, 24, 56, 15, 33, 3, 61, 18, 72, 60, 30, 54, 27, 49, 63, 41, 38, 28, 68, 29, 5, 25, 31, 52, 9, 22, 74, 67, 44, 62, 65, 7, 69, 42, 47, 32, 16, 8, 4, 11, 37, 71, 21, 46, 66, 58, 70, 55, 48, 57, 39, 40, 64]
+ Interference-free: False
+ Feasibility: False
+ Stability: False
+ Availability: False
+ Best fitness (minimization problem): 1.0
+
+
+ Best sequence of run 10 : [1, 47, 59, 13, 66, 57, 12, 7, 72, 11, 54, 25, 16, 3, 9, 23, 6, 63, 48, 71, 49, 19, 29, 60, 31, 46, 70, 33, 40, 64, 32, 17, 30, 20, 67, 28, 27, 35, 37, 52, 18, 53, 44, 22, 21, 26, 50, 62, 38, 8, 5, 34, 56, 74, 2, 15, 14, 51, 4, 39, 58, 55, 36, 10, 41, 69, 42, 73, 61, 45, 68, 43, 24, 65]
+ Interference-free: False
+ Feasibility: False
+ Stability: False
+ Availability: False
+ Best fitness (minimization problem): 1.0
+
+ Maybe not found any constraint-satisfied sequences. 43!=74
+===============
+ Interference-free?: False
+ Feasible?: False
+ Stable?: False
+ Available (Feasible and Stable)?: False
+ Final best sequence: [1, 16, 25, 49, 73, 21, 12, 23, 50, 34, 43, 42, 30, 20, 62, 56, 45, 51, 39, 32, 10, 26, 65, 71, 47, 11, 15, 14, 58, 13, 6, 18, 24, 68, 36, 48, 66, 3, 40, 54, 33, 7, 41, 44, 67, 63, 35, 37, 8, 17, 38, 64, 74, 55, 22, 69, 52, 19, 57, 28, 31, 70, 46, 61, 5, 29, 72, 9, 4, 2, 27, 60, 59, 53]
+ Difficulty evaluation: 1.0
+ Efficiency evaluation: 1.0
+ Prioritization evaluation: 1.0
+ Allocability evaluation: 1.0
+ Direction of best sequence: [4, 4, 4, 4, 2, 3, 3, 3, 3, 2, 1, 2, 2, 2, 2, 3, 4, 1, 2, 3, 3, 2, 2, 3, 3, 2, 2, 3, 4, 1, 2, 2, 1, 2, 2, 2, 2, 1, 2, 3, 2, 3, 2]
+
+===============
+ CASE STUDY NAME (CASE NUMBER): CU-X405C2_compressed_aligned (1)
+ CONSTRAINT TYPE: Interferencefree
+ FITNESS FUNCTION TYPE: Difficulty
+ FITNESS FUNCTION WEIGHT RATE: 1.0-1.0-1.0-1.0
+ GENE INITIALIZATION: Random
+ NUM_GENES: 74
+ NUM_GENOMES: 1
+ SELECT_GENOME: 30
+ CROSSOVER_RATE: 0.2
+ MUTATION_RATE: 0.1
+ CUT_PASTE_RATE: 0.35
+ BREAK_JOIN_RATE: 0.35
+ NUM_GENERATIONS: 100
+ NUM_RUNS: 10
+ OBJECTIVES: 1
+ 
+ 
+ 
+ conda activate planners && cd /root/ros2_ws/src/sequence_planner/ && python -c "from seqgen_or import SingleObjectiveGA; SingleObjectiveGA(case_num=1, genome_rate=1, constraint_type='interferencefree', objective_list=['difficulty'], progress_type='rough', initialization_method='ccgraph', n_generations=100, n_runs=10, save_pkl=False)"
+
+ Best sequence of run 1 : [1, 70, 69, 43, 17, 19, 29, 73, 67, 72, 39, 68, 3, 71, 48, 15, 21, 61, 44, 16, 18, 33, 30, 34, 2, 9, 8, 46, 47, 41, 42, 7, 58, 66, 27, 65, 38, 4, 51, 74, 50, 36, 10, 12, 53, 64, 35, 22, 37, 62, 63, 31, 40, 57, 13, 14, 59, 60, 28, 32, 20, 49, 24, 54, 26, 56, 45, 55, 25, 11, 52, 23, 5, 6]
+ Interference-free: False
+ Feasibility: False
+ Stability: True
+ Availability: False
+ Best fitness (minimization problem): 1.0
+
+
+ Best sequence of run 2 : [1, 3, 43, 44, 2, 73, 61, 15, 48, 67, 19, 70, 17, 29, 47, 39, 72, 46, 42, 34, 30, 69, 68, 41, 16, 33, 71, 8, 9, 21, 18, 64, 31, 32, 57, 4, 49, 20, 27, 7, 51, 50, 56, 54, 38, 22, 65, 66, 13, 12, 28, 74, 14, 62, 36, 53, 55, 11, 40, 23, 25, 26, 24, 37, 60, 59, 58, 63, 35, 52, 10, 45, 6, 5]
+ Interference-free: False
+ Feasibility: False
+ Stability: True
+ Availability: False
+ Best fitness (minimization problem): 1.0
+
+
+ Best sequence of run 3 : [1, 68, 29, 44, 15, 67, 16, 69, 30, 17, 19, 34, 33, 2, 3, 18, 21, 39, 70, 43, 72, 9, 8, 73, 71, 61, 46, 48, 47, 42, 41, 20, 7, 27, 49, 10, 74, 57, 4, 63, 66, 26, 58, 28, 32, 36, 35, 31, 60, 22, 24, 62, 51, 64, 59, 37, 38, 23, 54, 53, 55, 52, 65, 56, 40, 25, 50, 45, 13, 12, 14, 11, 5, 6]
+ Interference-free: False
+ Feasibility: False
+ Stability: True
+ Availability: False
+ Best fitness (minimization problem): 1.0
+
+
+ Best sequence of run 4 : [1, 44, 2, 73, 43, 46, 29, 3, 34, 15, 61, 19, 70, 16, 68, 17, 30, 69, 67, 39, 9, 42, 41, 47, 71, 21, 8, 72, 18, 33, 48, 37, 74, 63, 4, 58, 31, 20, 24, 25, 57, 51, 27, 65, 14, 55, 32, 22, 54, 26, 7, 45, 12, 64, 13, 66, 35, 60, 50, 38, 40, 59, 56, 11, 49, 36, 28, 10, 23, 62, 53, 52, 5, 6]
+ Interference-free: False
+ Feasibility: False
+ Stability: True
+ Availability: False
+ Best fitness (minimization problem): 1.0
+
+
+ Best sequence of run 5 : [1, 29, 3, 44, 19, 9, 43, 67, 68, 15, 17, 34, 73, 39, 70, 18, 69, 2, 71, 41, 21, 33, 72, 48, 46, 47, 30, 16, 61, 8, 42, 7, 65, 57, 32, 45, 38, 27, 64, 59, 4, 37, 40, 51, 58, 20, 60, 23, 25, 35, 31, 55, 52, 54, 22, 53, 10, 74, 63, 66, 62, 11, 28, 36, 50, 14, 24, 13, 49, 26, 12, 56, 5, 6]
+ Interference-free: False
+ Feasibility: False
+ Stability: True
+ Availability: False
+ Best fitness (minimization problem): 1.0
+
+
+ Best sequence of run 6 : [1, 71, 15, 17, 29, 43, 16, 18, 72, 30, 19, 33, 39, 21, 41, 42, 44, 68, 70, 48, 47, 61, 2, 3, 46, 73, 34, 69, 67, 8, 9, 7, 58, 10, 38, 49, 63, 65, 4, 64, 51, 27, 11, 20, 40, 23, 32, 12, 57, 37, 14, 50, 60, 31, 36, 24, 28, 13, 62, 59, 25, 35, 45, 66, 22, 74, 56, 54, 52, 53, 55, 26, 5, 6]
+ Interference-free: False
+ Feasibility: False
+ Stability: True
+ Availability: False
+ Best fitness (minimization problem): 1.0
+
+
+ Best sequence of run 7 : [1, 2, 39, 72, 29, 42, 67, 17, 71, 69, 73, 18, 33, 3, 8, 30, 19, 43, 9, 15, 21, 44, 46, 47, 16, 41, 68, 61, 34, 70, 48, 51, 4, 65, 57, 64, 27, 55, 12, 31, 7, 38, 32, 63, 14, 52, 74, 40, 20, 45, 58, 28, 50, 24, 62, 26, 60, 59, 54, 13, 37, 66, 10, 49, 53, 56, 23, 11, 35, 22, 25, 36, 5, 6]
+ Interference-free: False
+ Feasibility: False
+ Stability: True
+ Availability: False
+ Best fitness (minimization problem): 1.0
+
+
+ Best sequence of run 8 : [1, 3, 70, 29, 19, 67, 72, 69, 8, 68, 21, 15, 44, 61, 16, 17, 39, 18, 43, 47, 46, 2, 48, 30, 33, 73, 9, 71, 34, 42, 41, 57, 38, 51, 7, 59, 58, 62, 35, 49, 4, 10, 74, 66, 20, 23, 27, 26, 52, 53, 55, 56, 54, 24, 25, 31, 64, 32, 28, 36, 40, 13, 12, 14, 22, 50, 63, 60, 37, 11, 65, 45, 6, 5]
+ Interference-free: False
+ Feasibility: False
+ Stability: True
+ Availability: False
+ Best fitness (minimization problem): 1.0
+
+
+ Best sequence of run 9 : [1, 29, 61, 15, 68, 70, 17, 3, 9, 72, 18, 19, 73, 67, 39, 16, 41, 21, 43, 2, 42, 30, 33, 34, 48, 8, 71, 44, 69, 47, 46, 4, 51, 74, 58, 65, 54, 20, 27, 7, 32, 50, 36, 57, 64, 59, 35, 11, 12, 14, 53, 31, 37, 38, 66, 49, 56, 22, 25, 24, 23, 63, 13, 28, 55, 40, 60, 26, 62, 52, 45, 10, 6, 5]
+ Interference-free: False
+ Feasibility: False
+ Stability: True
+ Availability: False
+ Best fitness (minimization problem): 1.0
+
+
+ Best sequence of run 10 : [1, 73, 3, 43, 67, 15, 44, 17, 39, 29, 71, 16, 19, 30, 2, 72, 70, 46, 48, 8, 9, 21, 33, 18, 34, 69, 68, 42, 41, 61, 47, 51, 54, 57, 58, 7, 40, 55, 27, 10, 45, 37, 50, 22, 60, 59, 4, 32, 31, 38, 20, 66, 52, 35, 12, 28, 11, 23, 26, 24, 25, 14, 65, 62, 56, 53, 64, 74, 36, 49, 13, 63, 6, 5]
+ Interference-free: False
+ Feasibility: False
+ Stability: True
+ Availability: False
+ Best fitness (minimization problem): 1.0
+
+ Maybe not found any constraint-satisfied sequences. 28!=74
+===============
+ Interference-free?: False
+ Feasible?: False
+ Stable?: True
+ Available (Feasible and Stable)?: False
+ Final best sequence: [1, 70, 69, 43, 17, 19, 29, 73, 67, 72, 39, 68, 3, 71, 48, 15, 21, 61, 44, 16, 18, 33, 30, 34, 2, 9, 8, 46, 47, 41, 42, 7, 58, 66, 27, 65, 38, 4, 51, 74, 50, 36, 10, 12, 53, 64, 35, 22, 37, 62, 63, 31, 40, 57, 13, 14, 59, 60, 28, 32, 20, 49, 24, 54, 26, 56, 45, 55, 25, 11, 52, 23, 5, 6]
+ Difficulty evaluation: 1.0
+ Efficiency evaluation: 1.0
+ Prioritization evaluation: 1.0
+ Allocability evaluation: 1.0
+ Direction of best sequence: [6, 6, 6, 6, 6, 2, 6, 6, 6, 3, 4, 2, 2, 3, 3, 1, 1, 6, 6, 2, 2, 1, 2, 2, 2, 1, 1, 3]
+
+===============
+ CASE STUDY NAME (CASE NUMBER): CU-X405C2_compressed_aligned (1)
+ CONSTRAINT TYPE: Interferencefree
+ FITNESS FUNCTION TYPE: Difficulty
+ FITNESS FUNCTION WEIGHT RATE: 1.0-1.0-1.0-1.0
+ GENE INITIALIZATION: Ccgraph
+ NUM_GENES: 74
+ NUM_GENOMES: 1
+ SELECT_GENOME: 30
+ CROSSOVER_RATE: 0.2
+ MUTATION_RATE: 0.1
+ CUT_PASTE_RATE: 0.35
+ BREAK_JOIN_RATE: 0.35
+ NUM_GENERATIONS: 100
+ NUM_RUNS: 10
+ OBJECTIVES: 1
