@@ -1,0 +1,212 @@
+loop 1:
+>input:
+seq:[1,3,4,7,5,2,6,8,9]
+fes_seq:[]
+>process:
+obstacle : [1,3,4,7,5,2,6,8]
+target : 9
+>output:
+result:True
+seq:[1,3,4,7,5,2,6,8]
+fes_seq:[9]
+
+loop 2:
+>input:
+seq:[1,3,4,7,5,2,6,8]
+fes_seq:[9]
+>process:
+obstacle : [1,3,4,7,5,2,6]
+target : 8
+>output:
+result:True
+seq:[1,3,4,7,5,2,6]
+fes_seq:[9, 8]
+
+loop 3:
+>input:
+seq:[1,3,4,7,5,2,6]
+fes_seq:[9, 8]
+>process:
+obstacle : [1,3,4,7,5,2]
+target : 6
+>output:
+result:False
+
+//because it false, the next loop, we will change the target
+
+loop 3-1:
+>process:
+obstacle : [1,3,4,7,5,6]
+target : 2
+>output:
+result:False
+
+loop 3-2:
+>process:
+obstacle : [1,3,4,7,2,6]
+target : 5
+>output:
+result:False
+
+loop 3-3:
+>process:
+obstacle : [1,3,4,5,2,6]
+target : 7
+>output:
+result:True
+
+loop 3:
+>input:
+seq:[1,3,4,7,5,2,6]
+fes_seq:[9, 8]
+>process:
+obstacle : [1,3,4,5,2,6]
+target : 7
+>output:
+result:True
+seq:[1,3,4,5,2,6]
+fes_seq:[9, 8, 7]
+
+...
+
+loop final:
+>input:
+seq:[1,3]
+fes_seq:[9,8,7,2,6,4,5]
+>process:
+obstacle : [1]
+target : 1
+>output:
+result:True
+seq:[1]
+fes_seq:[9, 8, 7,2,6,4,5,3,1]
+
+def check_seq(seq_, fes_seq):
+    seq = seq_.copy()
+
+    stat = True:
+    i = len(seq)
+    while stat:
+        obj_lid = seq[i]
+        obstacle = seq[:i] + seq[i+1:]
+        fes = predictive_mo(obj_lid, obstacle)
+        if fes == True:
+            stat = False
+            fes_seq.append(obj_lid)
+            check_seq(obstacle, fes_seq)
+        i--
+    return fes_seq
+
+
+def check_seq(seq, fes_seq, all_true=True):
+    if not seq:
+        return fes_seq, all_true
+
+    i = len(seq) - 1
+    while i >= 0:
+        obj_lid = seq[i]
+        obstacle = seq[:i] + seq[i+1:]
+        seq_to_process = [obstacle, obj_lid]
+        fes = predictive_mo(seq_to_process)
+        print(f"Checking target: {obj_lid}, obstacle: {obstacle}, result: {fes}")
+        if fes:
+            fes_seq.append(obj_lid)
+            # Recurse with the new obstacle and updated fes_seq
+            return check_seq(obstacle, fes_seq, all_true)
+        i -= 1
+
+    # If all targets failed, remove the last element and set all_true to False
+    forced_remove = seq[-1]
+    print(f"All targets failed. Forcibly removing {forced_remove}")
+    fes_seq.append(forced_remove)
+    obstacle = seq[:-1]
+    return check_seq(obstacle, fes_seq, False)
+
+
+
+def graph_1(case_num, seq_, fes_seq, model, device, all_true=True):
+    seq = seq_.copy()
+    if not seq:
+        return fes_seq, all_true
+
+    mi = get_model_info(case_num)
+    meshdirpath = get_mesh_dir(case_num, mi)
+    sorted_stl_list = get_sorted_stl_list(meshdirpath)
+
+    i = len(seq) - 1
+    while i >= 0:
+        obj_lid = seq[i]
+        if should_ignore_label(mi['labels'], obj_lid):
+            i -= 1
+            continue
+
+        obstacle = seq[:i] + seq[i+1:]
+
+        combined_graph = generate_combined_graph(obstacle, sorted_stl_list, obj_lid)
+        edge_index = create_edge_index(combined_graph)
+        x = create_feature_tensor(combined_graph)
+        data = Data(x=x.to(device), edge_index=edge_index.to(device))
+
+        fes = predict(model, data, device)
+        if bool(fes):
+            # Pass a new list to avoid in-place modification issues
+            return graph_1(case_num, obstacle, fes_seq + [obj_lid], model, device, all_true)
+        i -= 1
+
+    # If all targets failed, remove the last element and set all_true to False
+    forced_remove = seq[-1]
+    print(f"All targets failed. Forcibly removing {forced_remove}")
+    return graph_1(case_num, seq[:-1], fes_seq + [forced_remove], model, device, False)
+
+
+
+for i in range(len(sd['seq'])):
+    seq_str = [str(s) for s in sd['grasp_gen_seqs'][i]]
+    print(seq_str)
+    seq_str_= seq_str.copy()
+
+    is_feasible = True
+    seq, is_man_feasible = sm.graph_1(case_num, [int(x) for x in seq_str_], model, device)
+
+    for i in range(len(seq_str)):
+        cnt +=1
+        # cmd = "export LIBGL_ALWAYS_INDIRECT=0; " + "python3 -c " + "\"from contact_planning import plan_contact; plan_contact(case_num=" + case_num +  ", seq=[" + ','.join(seq_str) + "], active_planner=[" + ','.join(sd['active_planner']) + "], is_vis=False, vis_failures=" + str(sd['vis_failures']) + ", is_save_dataset=" + str(sd['is_save_dataset']) + ", savefile_id=" + str(cnt) + ")\""  # noqa
+        cmd = (
+            "export LIBGL_ALWAYS_INDIRECT=0; "
+            "python3 -c \""
+            "from contact_planning_GT import plan_contact; "
+            "result = plan_contact("
+            "case_num=" + str(case_num) + ", "
+            "seq=[" + ','.join(seq_str) + "], "
+            "active_planner=[" + ','.join(sd['active_planner']) + "], "
+            "is_vis=False, "
+            "vis_failures=" + str(sd['vis_failures']) + ", "
+            "is_save_dataset=" + str(sd['is_save_dataset']) + ", "
+            "savefile_id=" + str(cnt) + "); "
+            "exit(1 if result is None else 1 if result else 0)\""
+            # 1=None/True (ignore), 0=False (break)
+        )
+        
+        seq_str.pop(-1)
+        
+        process = subprocess.run(cmd, shell=True)
+        result = process.returncode
+        if result == 0:  # Only break on explicit False
+            # print(f"Terminating - plan_contact returned False for sequence: {seq_str_}")
+            break
+        # returncode 0 (None/True) continues the loop
+    result_bool = (result != 0)
+    A = {
+        'seq': [int(x) for x in seq_str_],
+        'is_man_feasibility': is_man_feasible,
+        'GT': result_bool
+    }
+    results.append(A)
+    print(f"is_man_feasible : {is_man_feasible} || GT : {result_bool}")
+
+print(results)
+
+
+
+
+
