@@ -76,6 +76,9 @@ def save_data_set(datasetdir, case_num,  file_number, seq, target, feasibility, 
     # Define the file name
     file_path = os.path.join(dirpath, f'data-set-{file_number}.pkl')
 
+    
+
+
     # Prepare the dataset
     data_set = {
         'seq': seq,
@@ -90,7 +93,8 @@ def save_data_set(datasetdir, case_num,  file_number, seq, target, feasibility, 
 
     print(f"Data set saved to {file_path}")
 
-case_num = 0
+    
+case_num = 1
 pointdir = '/home/emu/Documents/surrogate/dataset/points/'
 pickle_dir = "/home/emu/Documents/surrogate/dataset/pickle"
 pickledir = '/home/emu/Documents/surrogate/dataset/pickle/data-set/'
@@ -115,7 +119,7 @@ for file_number in available_numbers:
     if file_number > 0:
         try:
             selected_data = read_selected_data(pickledir, case_num, file_number)
-            new_dir = os.path.join(pickle_dir,'m2n',f'cs{case_num}')
+            new_dir = os.path.join(pickle_dir,'m2n_1',f'cs{case_num}')
             if selected_data:
                 print(f"\nProcessing data for file number {file_number}:")
                 print("Sequence:", selected_data['seq'])
@@ -145,16 +149,18 @@ for file_number in available_numbers:
                 print(f"number graphs : {nx.number_connected_components(graphs)}")
 
                 # Connect graphs using MST
-                G_ob = m2n.connect_graphs_mst(graphs, pe_ob)
+                G_ob = m2n.connect_graphs_mst_2(graphs, pe_ob)
 
                 # Combine target and obstacle graphs
-                combined_graph = m2n.comb_tar_obs_1(g_t, G_ob)
+                combined_graph = m2n.comb_tar_obs(g_t, G_ob)
                 G = combined_graph
+                print("here")
+                # m2n.vis_comb_net(combined_graph)
                 
-                m2n.vis_comb_net(combined_graph, file_number, selected_data['target'])
-
                 save_data_set(new_dir, case_num, file_number, selected_data['seq'], selected_data['target'], selected_data['feasibility'], G)
                 print(f"Successfully processed and saved data for file number {file_number}")
+                
+                
 
         except Exception as e:
             print(f"Error processing file number {file_number}: {str(e)}")

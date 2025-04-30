@@ -78,7 +78,7 @@ class GraphDataset(Dataset):
         print(f"\nLoaded {len(self.data_list)} graphs.")
 
     def get_available_files(self):
-        file_pattern = os.path.join(self.directory, 'pickle', 'm2n', self.folder, 'data-set-*.pkl')
+        file_pattern = os.path.join(self.directory, 'pickle', 'm2n_1', self.folder, 'data-set-*.pkl')
         files = glob.glob(file_pattern)
         
         file_numbers = []
@@ -118,8 +118,8 @@ class GraphDataset(Dataset):
             x = torch.tensor([[
                                 G.nodes[n]['x'],      # x coordinate
                                 G.nodes[n]['y'],      # y coordinate
-                                G.nodes[n]['z']      # z coordinate
-                                # 1 if G.nodes[n]['graph_type'] == 'target' else 0
+                                G.nodes[n]['z'],      # z coordinate
+                                1 if G.nodes[n]['graph_type'] == 'target' else 0
                                 ] 
                                 for n in G.nodes()], 
                                 dtype=torch.float)

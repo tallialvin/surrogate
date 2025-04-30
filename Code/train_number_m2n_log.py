@@ -88,7 +88,7 @@ def generate_folder_name(case_num, base_path):
     return folder
 
 def setup_experiment(case_num):
-    base_folder = "experiment_results_m2n_100/multiple_object"
+    base_folder = "experiment_results_m2n-2_100/multiple_object"
     folder = generate_folder_name(case_num, base_folder)
     full_path = os.path.join(base_folder, folder)
     folder = f'cs{case_num}'
@@ -374,3 +374,4 @@ for num_training in num_trains:
 
     
 
+# python train_number_m2n_log.py --epochs=100 --dropout_ratio=0.5 --pooling_ratio=0.5 --num_features=32 --nhid=128 --final_dim=32 --alpha=1.5 --batch_size=16 --case_num=0

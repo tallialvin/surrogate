@@ -234,6 +234,70 @@ def connect_graphs_mst(combined_graph, points_list, k=3):
 
     return combined_graph
 
+
+def connect_graphs_mst_2(combined_graph, points_list, k=3):
+    # Combine all points
+    all_points = np.vstack(points_list)
+    
+    # Find inter-graph connections using KNN
+    nbrs = NearestNeighbors(n_neighbors=k+1, algorithm='ball_tree').fit(all_points)
+    distances, indices = nbrs.kneighbors(all_points)
+    
+    # Track graph boundaries
+    graph_boundaries = [0]
+    for points in points_list:
+        graph_boundaries.append(graph_boundaries[-1] + len(points))
+    
+    # Add inter-graph edges
+    for i in range(len(all_points)):
+        for j in indices[i][1:k+1]:  # Skip self
+            # Check if points are from different graphs
+            graph_i = next(idx-1 for idx in graph_boundaries if idx > i) - 1
+            graph_j = next(idx-1 for idx in graph_boundaries if idx > j) - 1
+            
+            if graph_i != graph_j:
+                distance = np.linalg.norm(all_points[i] - all_points[j])
+                combined_graph.add_edge(i, j, weight=distance)
+    
+    # Function to connect components iteratively using CoM representatives
+    def connect_components():
+        components = list(nx.connected_components(combined_graph))
+        while len(components) > 1:
+            # For each component, find its CoM and the closest node to CoM
+            rep_nodes = []
+            for comp in components:
+                indices = np.array(list(comp))
+                points = all_points[indices]
+                com = points.mean(axis=0)
+                dists = np.linalg.norm(points - com, axis=1)
+                closest_idx = np.argmin(dists)
+                rep_node = indices[closest_idx]
+                rep_nodes.append(rep_node)
+            
+            # Find the closest pair of representative nodes between components
+            min_dist = float('inf')
+            bridge_nodes = None
+            for i in range(len(rep_nodes)):
+                for j in range(i + 1, len(rep_nodes)):
+                    dist = np.linalg.norm(all_points[rep_nodes[i]] - all_points[rep_nodes[j]])
+                    if dist < min_dist:
+                        min_dist = dist
+                        bridge_nodes = (rep_nodes[i], rep_nodes[j])
+            
+            # Add edge between the closest representatives
+            if bridge_nodes:
+                combined_graph.add_edge(bridge_nodes[0], bridge_nodes[1], weight=min_dist)
+            
+            # Update components
+            components = list(nx.connected_components(combined_graph))
+        return combined_graph
+
+    # Call the function to connect components iteratively
+    combined_graph = connect_components()
+
+    return combined_graph
+
+
 def comb_tar_obs(g_t, G_ob):
     # print(f"number obstacle sub-network : {nx.number_connected_components(G_ob)}")
 
@@ -557,7 +621,9 @@ def vis_net_comb(points1, graph1, points2, graph2,
     plotter.set_background('white')
     plotter.show()
 
-    
+
+
+
 def vis_comb_net(combined_graph, col_target='red', col_obstacle='blue'):
     """
     Visualize a combined network with nodes as spheres and edges colored by graph_type
